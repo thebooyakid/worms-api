@@ -5,11 +5,11 @@ from flask_migrate import Migrate
 from flask_httpauth import HTTPBasicAuth, HTTPTokenAuth
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime as dt, timedelta
-import secrets
+# import secrets
 # from flask_cors import CORS
 
 class Config():
-    SQLAlchemy_DATABASE_URI = os.environ.get("SQLALCHEMY_DATABASE_URI")
+    SQLALCHEMY_DATABASE_URI = os.environ.get("SQLALCHEMY_DATABASE_URI")
     SQLALCHEMY_TRACK_MODIFICATIONS = os.environ.get("SQLALCHEMY_TRACK_MODIFICATIONS")
 
 app = Flask(__name__)
@@ -17,8 +17,10 @@ app.config.from_object(Config)
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 basic_auth = HTTPBasicAuth()
-token_auth = HTTPTokenAuth()
+# token_auth = HTTPTokenAuth()
 # cors = CORS(app)
+
+
 
 @basic_auth.verify_password
 def verify_password(email, password):
@@ -34,9 +36,9 @@ def verify_password(email, password):
 #     g.current_user = u
 #     return g.current_user or None
 
-class User(db.model):
-    user_id = db.Column(db.integer, primary_key=True)
-    email = db.Colums(db.String, index=True, unique=True)
+class User(db.Model):
+    user_id = db.Column(db.Integer, primary_key=True)
+    email = db.Column(db.String, index=True, unique=True)
     first_name = db.Column(db.String)
     last_name = db.Column(db.String)
     password = db.Column(db.String)
@@ -235,7 +237,7 @@ def post_user():
     new_user.save()
     return make_response("New User Registered", 200)
 
-@app.put('/user/<int:user_id>')
+@app.put('/user/')
 def put_user(user_id):
     data = request.get_json()
     user = User.query.get(user_id)
@@ -243,7 +245,7 @@ def put_user(user_id):
     user.save()
     return make_response("Profile Updated", 200)
 
-@app.delete('/user/<int:user_id')
+@app.delete('/user/')
 def delete_user(user_id):
     User.query.get(user_id).delete()
     return make_response("User Successfully Deleted", 200)
