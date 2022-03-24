@@ -6,7 +6,7 @@ from flask_httpauth import HTTPBasicAuth, HTTPTokenAuth
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime as dt, timedelta
 # import secrets
-# from flask_cors import CORS
+from flask_cors import CORS
 
 class Config():
     SQLALCHEMY_DATABASE_URI = os.environ.get("SQLALCHEMY_DATABASE_URI")
@@ -18,7 +18,7 @@ db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 basic_auth = HTTPBasicAuth()
 # token_auth = HTTPTokenAuth()
-# cors = CORS(app)
+cors = CORS(app)
 
 
 
@@ -237,7 +237,7 @@ def post_user():
     new_user.save()
     return make_response("New User Registered", 200)
 
-@app.put('/user/')
+@app.put('/user/<int:id>')
 def put_user(user_id):
     data = request.get_json()
     user = User.query.get(user_id)
@@ -245,37 +245,60 @@ def put_user(user_id):
     user.save()
     return make_response("Profile Updated", 200)
 
-@app.delete('/user/')
+@app.delete('/user/<int:id>')
 def delete_user(user_id):
     User.query.get(user_id).delete()
     return make_response("User Successfully Deleted", 200)
 
 ##############
 
-app.get('/painting')
+@app.get('/painting')
 def get_paintings():
     return make_response({'paintings':[painting.to_dict() for painting in Painting.query.all()]}, 200)
 
-app.get('/painting/<int:id>')
+@app.get('/painting/<int:id>')
 def get_painting(id):
     return make_response(Painting.query.filter_by(id=id).first().to_dict(), 200)
 
-app.get('/pin')
+@app.post('/painting')
+def post_painting():
+    data = request.get_json()
+    new_painting = Painting()
+    new_painting.from_dict(data)
+    new_painting.save()
+    return make_response('Painting added', 200)
+
+@app.get('/pin')
 def get_pins():
     return make_response({'pin':[pin.to_dict() for pin in Pin.query.all()]}, 200)
 
-app.get('/pin/<int:id>')
+@app.get('/pin/<int:id>')
 def get_pin(id):
     return make_response(Pin.query.filter_by(id=id).first().to_dict(), 200)
 
-app.get('/custom')
+@app.post('/pin')
+def post_pin():
+    data = request.get_json()
+    new_painting = Pin()
+    new_painting.from_dict(data)
+    new_painting.save()
+    return make_response('Pin added', 200)
+
+@app.get('/custom')
 def get_customs():
     return make_response({'customs':[custom.to_dict() for custom in Custom.query.all()]}, 200)
 
-app.get('/custom/<int:id>')
+@app.get('/custom/<int:id>')
 def get_custom(id):
     return make_response(Custom.query.filter_by(id=id).first().to_dict(), 200)
 
+@app.post('/custom')
+def post_custom():
+    data = request.get_json()
+    new_painting = Custom()
+    new_painting.from_dict(data)
+    new_painting.save()
+    return make_response('custom added', 200)
 
 #########################
 
