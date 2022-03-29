@@ -115,73 +115,8 @@ class Painting(db.Model):
     title = db.Column(db.String)
     description = db.Column(db.String)
     img = db.Column(db.String)
-    created_on = db.Column(db.DateTime, default=dt.utcnow)
-
-    def __repr__(self):
-        return f'<{self.id}|{self.title}>'
-
-    def save(self):
-        db.session.add(self)
-        db.session.commit()
-
-    def delete(self):
-        db.session.delete(self)
-        db.session.commit()
-
-    def from_dict(self, data):
-        for field in ['medium', 'title', 'description', 'img']:
-            if field in data:
-                setattr(self, field, data[field])
-
-    def to_dict(self):
-        return {
-            "id": self.id,
-            "medium": self.medium,
-            "title": self.title,
-            "description": self.description,
-            "img": self.img,
-            "created_on": self.created_on
-        }
-
-class Pin(db.Model):
-    id = db.Column(db.Integer, primary_key = True)
-    title = db.Column(db.String)
-    description = db.Column(db.String)
-    img = db.Column(db.String)
-    created_on = db.Column(db.DateTime, default=dt.utcnow)
-
-    def __repr__(self):
-        return f'<{self.id}|{self.title}>'
-
-    def save(self):
-        db.session.add(self)
-        db.session.commit()
-
-    def delete(self):
-        db.session.delete(self)
-        db.session.commit()
-
-    def from_dict(self, data):
-        for field in ['title', 'description', 'img']:
-            if field in data:
-                setattr(self, field, data[field])
-
-    def to_dict(self):
-        return {
-            "id": self.id,
-            "title": self.title,
-            "description": self.description,
-            "img": self.img,
-            "created_on": self.created_on
-        }
-
-class Custom(db.Model):
-    id = db.Column(db.Integer, primary_key = True)
     category = db.Column(db.String)
-    medium = db.Column(db.String)
-    title = db.Column(db.String)
-    description = db.Column(db.String)
-    img = db.Column(db.String)
+    views = db.Column(db.Integer)
     created_on = db.Column(db.DateTime, default=dt.utcnow)
 
     def __repr__(self):
@@ -196,20 +131,89 @@ class Custom(db.Model):
         db.session.commit()
 
     def from_dict(self, data):
-        for field in ['category', 'medium', 'title', 'description', 'img']:
+        for field in ['medium', 'title', 'description', 'img', 'category', 'views']:
             if field in data:
                 setattr(self, field, data[field])
 
     def to_dict(self):
         return {
             "id": self.id,
-            "category": self.category,
             "medium": self.medium,
             "title": self.title,
             "description": self.description,
             "img": self.img,
+            "category": self.category,
+            "views": self.views,
             "created_on": self.created_on
         }
+
+# class Pin(db.Model):
+#     id = db.Column(db.Integer, primary_key = True)
+#     title = db.Column(db.String)
+#     description = db.Column(db.String)
+#     img = db.Column(db.String)
+#     created_on = db.Column(db.DateTime, default=dt.utcnow)
+
+#     def __repr__(self):
+#         return f'<{self.id}|{self.title}>'
+
+#     def save(self):
+#         db.session.add(self)
+#         db.session.commit()
+
+#     def delete(self):
+#         db.session.delete(self)
+#         db.session.commit()
+
+#     def from_dict(self, data):
+#         for field in ['title', 'description', 'img']:
+#             if field in data:
+#                 setattr(self, field, data[field])
+
+#     def to_dict(self):
+#         return {
+#             "id": self.id,
+#             "title": self.title,
+#             "description": self.description,
+#             "img": self.img,
+#             "created_on": self.created_on
+#         }
+
+# class Custom(db.Model):
+#     id = db.Column(db.Integer, primary_key = True)
+#     category = db.Column(db.String)
+#     medium = db.Column(db.String)
+#     title = db.Column(db.String)
+#     description = db.Column(db.String)
+#     img = db.Column(db.String)
+#     created_on = db.Column(db.DateTime, default=dt.utcnow)
+
+#     def __repr__(self):
+#         return f'<{self.id}|{self.title}>'
+
+#     def save(self):
+#         db.session.add(self)
+#         db.session.commit()
+
+#     def delete(self):
+#         db.session.delete(self)
+#         db.session.commit()
+
+#     def from_dict(self, data):
+#         for field in ['category', 'medium', 'title', 'description', 'img']:
+#             if field in data:
+#                 setattr(self, field, data[field])
+
+#     def to_dict(self):
+#         return {
+#             "id": self.id,
+#             "category": self.category,
+#             "medium": self.medium,
+#             "title": self.title,
+#             "description": self.description,
+#             "img": self.img,
+#             "created_on": self.created_on
+#         }
 
 ### API Routes ###
 
